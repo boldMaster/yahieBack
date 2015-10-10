@@ -20,5 +20,11 @@ Route::controllers([
     'password' => 'Auth\PasswordController'
 ]);
 
-
 require 'Routes/Mail.php';
+
+require 'Routes/User.php';
+require 'Routes/Admin.php';
+
+require 'Routes/Ref.php';
+
+require 'Routes/androidApi.php';

@@ -6,7 +6,7 @@
  * Time: 12:06 PM
  */
 
-Route::post('mail/resetPassword','Mail/MailController@resetPassword');
-Route::post('mail/send','Mail/MailController@send');
+Route::post('mail/resetPassword','Mail\MailController@resetPassword');
+Route::post('mail/send','Mail\MailController@send');
 // Test sending
-Route::get('mail/send','Mail/MailController@send');
+//Route::get('mail/send','Mail\MailController@send');

@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'flip_noreply@honeyspear.com', 'name' => 'FlippyBird'],
 
     /*
     |--------------------------------------------------------------------------

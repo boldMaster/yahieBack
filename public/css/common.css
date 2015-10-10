@@ -1,0 +1,30 @@
+nav{
+    background-color:#26a69a;
+}
+
+.button-collapse i
+{
+    margin-left:5px;
+}
+select{
+    background-color:#E4F3F1;
+}
+select:focus{
+    outline: 1px solid #70D4CA;
+}
+
+label.browser-select{
+    position:static;
+}
+.file-field .file-path-wrapper {
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+a.brand-logo{
+    width:100px;
+}
+
+.error-text{
+    color:red;
+}

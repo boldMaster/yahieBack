@@ -15,11 +15,11 @@ class SendMail extends Model
     {
         $data = array();
 
-        $data['from'] = array_get($oriInputs, 'email.from');
-        $data['to'] = array_get($oriInputs, 'email.to');
-        $data['cc'] = array_get($oriInputs, 'email.cc');
-        $data['subject'] = array_get($oriInputs, 'email.subject');
-        $data['content'] = array_get($oriInputs, 'email.content');
+        $data['from'] = array_get($oriInputs, 'from');
+        $data['to'] = array_get($oriInputs, 'to');
+        $data['cc'] = array_get($oriInputs, 'cc');
+        $data['subject'] = array_get($oriInputs, 'subject');
+        $data['content'] = array_get($oriInputs, 'content');
 
         return $data;
     }
