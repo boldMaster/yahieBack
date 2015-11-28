@@ -205,7 +205,7 @@ class UserController extends Controller
 			// Check if the user is exists in database
 			$user = DB::table('users')->where('email',$email)->where('password',$pass)->first();
 					
-			// Set error message if we unabel to get the user information
+			// Set error message if we unable to get the user information
 			if(!$user)
 			{
 				$errors[] = "Invalid user credentials.";

@@ -3,8 +3,7 @@
 namespace App\Http\Model\Places;
 
 
-class Create extends Places
+class PlaceCreate extends Places
 {
     //
-
 }

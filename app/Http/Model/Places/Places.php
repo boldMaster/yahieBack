@@ -8,7 +8,7 @@ class Places extends Model
 {
     //Set the table name
     protected $table = 'places';
-    public $timestamps = true;
+    public $timestamps = false;
     protected $fillable = array('username',
                                 'place_title',
                                 'place_desc',

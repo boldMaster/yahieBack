@@ -6,6 +6,6 @@
  * Time: 12:33 AM
  */
 
-Route::get('android/v1/auth/forgot', [
-    'as' => 'forgot', 'uses' => 'Auth\PasswordController@postEmailApi'
-]);
+require 'AndroidApi/Auth.php';
+require 'AndroidApi/Place.php';
+require 'AndroidApi/User.php';

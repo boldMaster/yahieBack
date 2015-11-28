@@ -28,3 +28,22 @@ a.brand-logo{
 .error-text{
     color:red;
 }
+.container{
+    margin-top:10px;
+}
+
+.text-grey{
+    color:#bdbdbd;
+}
+
+@media screen and (max-width: 479px) {
+    .card-title.mobile-text {
+        font-size:14px;
+    }
+}
+
+@media screen and (min-width:480px) and (max-width: 720px) {
+    .card-title.mobile-text {
+        font-size:18px;
+    }
+}

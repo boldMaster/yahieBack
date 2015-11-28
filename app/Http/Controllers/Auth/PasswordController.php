@@ -25,6 +25,10 @@ class PasswordController extends Controller {
 
     // Held the current using API version for this Controller
     private static $API_VERSION = "1.0";
+    // Sync with the String in the Android Application
+    protected static $error_email_not_exist = "error_email_not_exist";
+    protected static $error_email_validation_failed = "error_email_validation_failed";
+    protected static $error_access_denied = "error_access_denied";
 
 
     /**
@@ -54,6 +58,7 @@ class PasswordController extends Controller {
         $status_code = HttpRequest::$REQUEST_SUCCESS_CODE;
         $status = true;
         $success = false;
+        $errors = "";
 
         // Get android callback
         $android_callback = $request->query('caller');
@@ -62,7 +67,7 @@ class PasswordController extends Controller {
             //Validate the email
             $validator = Validator::make($arrRequest, ['email' => 'required|email']);
             if($validator->fails() && $status_code === HttpRequest::$REQUEST_SUCCESS_CODE) {
-                $errors = "Email Error";
+                $errors = "Email validation failed";
                 $status_code = HttpRequest::$VALIDATION_FAILED_CODE;
                 $status = false;
             }
@@ -70,10 +75,6 @@ class PasswordController extends Controller {
             if($status) {
                 // Sent Reset Link
                 $response = $this->sendResetEmail($request);
-                /*($request->only('email'), function (Message $message) {
-                    $message->subject($this->getEmailSubject());
-                });
-*/
                 switch ($response) {
                     case Password::RESET_LINK_SENT:
                         $success = true;
@@ -81,6 +82,7 @@ class PasswordController extends Controller {
 
                     case Password::INVALID_USER:
                         $success = false;
+                        $errors = "Email is not exist";
                         break;
                 }
             }

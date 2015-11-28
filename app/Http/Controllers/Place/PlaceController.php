@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Place;
 
-
 use App\Http\Model\Places\Places;
-use App\Http\Model\Places\Read;
+use App\Http\Model\Places\PlaceRead;
 use App\Http\Model\Ref\RefCategoryGroupRead;
 use App\Http\Model\Ref\RefCategoryRead;
 use App\Http\Model\Ref\RefCountryRead;
@@ -13,6 +12,8 @@ use App\Http\Model\Ref\RefLocationRead;
 use Illuminate\Http\Request;
 
 use Carbon\Carbon;
+use App\Http\Controllers\UtilityController;
+use App\Http\Model\HttpRequest\HttpRequest;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddPlace;
@@ -24,15 +25,13 @@ class PlaceController extends Controller
      *
      * @return Response
      */
+    // Held the current using API version for this Controller
+    private static $API_VERSION = "1.0";
+
     public function index()
     {
-        //
-        $jsonPlaces = Read::getAllPlacesByLatestUpdate();
-        $arrPlaces = array();
-        foreach ($jsonPlaces as $places) {
-            $arrCategory = array_add($arrPlaces,$places['place_id'] , $places['place_desc'] , $places['place_desc']);
-        }
-        return view('places.list_places',compact('jsonPlaces','arrCategory','arrCountry','arrState','arrLocation'));
+        $arrPlaces = PlaceRead::getAllPlacesByLatestUpdate();
+        return view('places.index',compact('arrPlaces'));
     }
 
     /**
@@ -66,7 +65,7 @@ class PlaceController extends Controller
     {
         //
 
-        return
+
     }
 
     /**
@@ -128,7 +127,45 @@ class PlaceController extends Controller
     public function insertPlace(AddPlace $request) {
         $request['created_at'] = Carbon::now()->timestamp;
         Places::create($request->all());
-        return redirect('public/admin/place/show');
+        return redirect('/flink/public/admin/place/index');
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function getPlaceApi(Request $request){
+        $errors = "";
+        $status_code = "";
+        $status = "";
+        $result ="";
+
+        $public_access_key = $request->query('api_key');
+        // Get android callback
+        $android_callback = $request->query('caller');
+        //exp json input "{"category_group_id": 2,"state_id": 7,"category_id": 20101}"
+        $jsonParams = $request->query('jsonParam');
+        $arrParams = json_decode($jsonParams,true);
+        // If the Api Key is valid
+        if(UtilityController::validateApiKey($public_access_key)) {
+            $read = new PlaceRead();
+            $result = $read->getFilteredPlace($arrParams);
+        }
+        else {
+            $errors = "Access Denied";
+            $status_code = HttpRequest::$ACCESS_DENIED_CODE;
+            $status = false;
+        }
+
+        $arrResponse = array(
+            'api_ver' => self::$API_VERSION,
+            'caller' => $android_callback,
+            'error' => $errors,
+            'status_code' => $status_code,
+            'status' => $status,
+            'result' => $result
+        );
+        return $arrResponse;
     }
 
 }

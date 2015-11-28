@@ -8,6 +8,3 @@
 
 Route::post('user/resetPassword','Mail\MailController@resetPassword');
 
-Route::get('android/v1/user/signin', [
-    'as' => 'signin', 'uses' => 'User\UserController@signin'
-]);

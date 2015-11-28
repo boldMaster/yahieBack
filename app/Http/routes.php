@@ -27,4 +27,5 @@ require 'Routes/Admin.php';
 
 require 'Routes/Ref.php';
 
+// Mobile Http Request Routes
 require 'Routes/androidApi.php';
