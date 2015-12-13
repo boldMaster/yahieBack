@@ -15,6 +15,7 @@ class CreateEventsTable extends Migration
         //
         Schema::create('events', function (Blueprint $table) {
             $table->integer('event_id')->primary()->index();
+            $table->integer('place_id',false)->index();
             $table->integer('advertiser_id',false)->index();
             $table->tinyInteger('status', false)->index();
             $table->integer('total_amount', false);
