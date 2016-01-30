@@ -9,3 +9,4 @@
 require 'AndroidApi/Auth.php';
 require 'AndroidApi/Place.php';
 require 'AndroidApi/User.php';
+require 'AndroidApi/Event.php';

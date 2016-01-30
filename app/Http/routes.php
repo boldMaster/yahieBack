@@ -21,11 +21,18 @@ Route::controllers([
 ]);
 
 require 'Routes/Mail.php';
-
 require 'Routes/User.php';
 require 'Routes/Admin.php';
+require 'Routes/Event.php';
 
 require 'Routes/Ref.php';
 
 // Mobile Http Request Routes
 require 'Routes/androidApi.php';
+
+// Display all SQL executed in Eloquent
+Event::listen('illuminate.query', function($query)
+{
+    var_dump($query);
+});
+

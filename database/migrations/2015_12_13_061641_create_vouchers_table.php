@@ -14,7 +14,7 @@ class CreateVouchersTable extends Migration
     {
         //
         Schema::create('vouchers', function (Blueprint $table) {
-            $table->integer('voucher_id')->primary()->index();
+            $table->increments('voucher_id')->index();
             $table->integer('event_id', false)->index();
             $table->integer('user_id', false)->index();
             $table->string('public_key', 10)->index();

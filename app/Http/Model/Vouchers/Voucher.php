@@ -15,4 +15,10 @@ class Voucher extends Model
         'secret_key',
         'expired_at',
         'created_at');
+
+    private function validateVoucher($user_id, $event_id, $strSecretKey, $publicKey)
+    {
+        // Get the voucher
+
+    }
 }

@@ -13,7 +13,7 @@ class CreatePlacesTable extends Migration
     public function up()
     {
         Schema::create('places', function (Blueprint $table) {
-        $table->integer('place_id')->primary();
+        $table->increments('place_id');
         $table->string('place_title', 200);
         $table->string('place_desc', 400);
         $table->string('place_address', 400);
