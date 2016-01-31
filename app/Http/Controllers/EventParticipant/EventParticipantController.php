@@ -40,7 +40,7 @@ class EventParticipantController extends Controller
         $android_callback = $request->query('caller');
         // If the Api Key is valid
         if (UtilityController::validateApiKey($public_access_key)) {
-            /* Future enhance with the weightage measurement
+            /* Future enhance with the weighing measurement
              * Temporary assign all to default value
              */
             $request['weight'] = self::$weight;

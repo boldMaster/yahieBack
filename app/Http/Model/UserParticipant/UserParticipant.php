@@ -8,8 +8,10 @@ class UserParticipant extends Model
 {
     //
     protected $table = 'user_participant';
-    public $timestamps = false;
+    protected $primaryKey = 'user_id';
+    public $timestamps = true;
     protected $fillable = array('user_id',
         'event_participant',
-        'updated_at',);
+        'updated_at',
+        'created_at',);
 }

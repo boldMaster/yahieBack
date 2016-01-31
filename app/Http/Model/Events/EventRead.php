@@ -15,6 +15,6 @@ class EventRead extends Event
     }
 
     public static function getEventDetail($intEventId){
-        return self::where('event_id' ,'=', $intEventId)->first()->get();
+        return self::where('event_id' ,'=', $intEventId)->get();
     }
 }

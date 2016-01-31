@@ -85,4 +85,13 @@ class UtilityController extends Controller
                 return 1;
         }
     }
+
+    public static function getAdvanceDayDate($intDayInAdvance, $blnTime = true)
+    {
+        if ($blnTime) {
+            return Carbon::now(self::$systemTimeZone)->addDay($intDayInAdvance)->format('Y-m-d H:i:s');
+        } else {
+            return Carbon::now(self::$systemTimeZone)->addDay($intDayInAdvance)->format('Y-m-d').' 00:00:00';
+        }
+    }
 }

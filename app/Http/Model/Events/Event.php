@@ -21,17 +21,12 @@ class Event extends Model
         'updated_at',
         'created_at');
 
-    public static function genSecretKey($intVoucher, $intUserId)
-    {
-        if (empty($intVoucher)) $intVoucher = 11223;
-        if (empty($intUserId)) $intUserId = 11234234;
-        $str2 = time().$intVoucher.$intUserId;
-        return md5($str2);
-    }
     // Genearate Public Key
     public static function genPublicKey()
     {
-
+        $bytes = openssl_random_pseudo_bytes(2);
+        $hex   = bin2hex($bytes);
+        return $hex;
     }
 
 
