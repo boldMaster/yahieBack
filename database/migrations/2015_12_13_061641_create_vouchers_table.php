@@ -20,6 +20,7 @@ class CreateVouchersTable extends Migration
             $table->string('public_key', 10)->index();
             $table->string('secret_key', 20)->index();
             $table->timestamp('expired_at');
+            $table->timestamp('updated_at');
             $table->timestamp('created_at');
         });
     }

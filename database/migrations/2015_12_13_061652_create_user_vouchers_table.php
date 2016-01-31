@@ -16,6 +16,7 @@ class CreateUserVouchersTable extends Migration
         Schema::create('user_vouchers', function (Blueprint $table) {
             $table->integer('user_id',false)->index();
             $table->integer('voucher_id',false)->index();
+            $table->timestamp('updated_at');
             $table->timestamp('created_at');
         });
     }

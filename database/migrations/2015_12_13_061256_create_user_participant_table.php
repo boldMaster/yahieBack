@@ -15,6 +15,7 @@ class CreateUserParticipantTable extends Migration
         Schema::create('user_participant', function (Blueprint $table) {
         $table->integer('user_id',false)->index();
         $table->integer('event_participant',false);
+        $table->timestamp('created_at');
         $table->timestamp('updated_at');
         });
     }
