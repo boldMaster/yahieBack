@@ -75,10 +75,5 @@ class EventWinnerController extends Controller
     {
         return UtilityController::getAdvanceDayDate($duration, false);
     }
-
-    // Testing function
-    public function getRandomKey (){
-        UtilityController::getAdvanceDayDate(10);
-    }
 }
 
