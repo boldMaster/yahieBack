@@ -130,42 +130,179 @@ class PlaceController extends Controller
         return redirect('/flink/public/admin/place/index');
     }
 
+	/**
+     * Custom function for Place Controller
+     * Access validation 
+	 * @param  Request  $request
+	 * @return Array $access_info 
+     */
+	public function access_validation(Request $request) {
+		// Set default status to true
+		$status = true;
+		// Default status code is 200
+		$status_code = 200;
+		// This array will store the list of error messages
+		$errors = array();
+	 
+		// Get public access key and user access key from GET
+		$public_access_key = $request->query('api_key');
+		$user_access_key = $request->query('access_key');
+		
+		// Get android callback 
+		$android_callback = $request->query('caller');
+		
+		// Define public access key 
+		$predefined_public_key = 'abc123';
+		
+		// Check if the public access key is valid 
+		if($public_access_key != $predefined_public_key)
+		{
+			// Set error message 
+			$errors[] = "Access Denied";
+		}
+		
+		// If there are any errors during validation, set the status code to 403 unauthorized access 
+		if(!empty($errors))
+		{
+			// Set status code to 403
+			$status_code = HttpRequest::$ACCESS_DENIED_CODE;
+			// Set the status to false 
+			$status = false;
+		}
+		
+		// Finally, store all info into a single array 
+		$access_info = array(
+			'api_ver' 	  => self::$API_VERSION,
+			'caller'	  => $android_callback,
+			'error'		  => $errors,
+			'status_code' => $status_code,
+			'status'	  => $status,
+		);
+		
+		return $access_info;
+	}
+	
     /**
      * @param Request $request
      * @return array
      */
     public function getPlaceApi(Request $request){
-        $errors = "";
-        $status_code = "";
-        $status = "";
-        $result ="";
+		// Get the parameter from GET 
+		// Note: We do not need to sanitize the input due to laravel automatically sanitize it 
+		$place_list = array();
+		$errors = array();
+		
+		// Validate the access 
+		$access_rtn = $this->access_validation($request);
+		// Check if the access is valid 
+		$status = $access_rtn['status'];
+		if($status)
+		{
+			// Extract information 
+			$criteria_encoded = $request->query('criteria');
+			// Decode the JSON criteria to normal array 
+			$criteria = json_decode($criteria_encoded,true);
+			
+			// Make sure the criteria is not empty 
+			if(!empty($criteria))
+			{
+				// Extract information
+				$country_id = $criteria['country'];
+				$state_id = $criteria['state'];
+				$category_group_id = $criteria['categoryGroup'];
+				$category_id = $criteria['category'];
+				$sub_category_id = $criteria['subCategory'];
+			
+				// Extract the required parameters and Set query condition
+				$query_params = array(
+					'country_id'		=> $country_id,
+					'state_id' 			=> $state_id,
+					'category_group_id' => $category_group_id,
+					'category_id' 		=> $category_id,
+					'sub_category_id' 	=> $sub_category_id,
+				);
 
-        $public_access_key = $request->query('api_key');
-        // Get android callback
-        $android_callback = $request->query('caller');
-        //exp json input "{"category_group_id": 2,"state_id": 7,"category_id": 20101}"
-        $jsonParams = $request->query('jsonParam');
-        $arrParams = json_decode($jsonParams,true);
-        // If the Api Key is valid
-        if(UtilityController::validateApiKey($public_access_key)) {
-            $read = new PlaceRead();
-            $result = $read->getFilteredPlace($arrParams);
-        }
-        else {
-            $errors = "Access Denied";
-            $status_code = HttpRequest::$ACCESS_DENIED_CODE;
-            $status = false;
-        }
-
-        $arrResponse = array(
-            'api_ver' => self::$API_VERSION,
-            'caller' => $android_callback,
-            'error' => $errors,
-            'status_code' => $status_code,
-            'status' => $status,
-            'result' => $result
-        );
-        return $arrResponse;
+				// Calculate the offset 
+				$page = $request->query('page');
+				$limit = $request->query('num');
+				$offset = ($page - 1) * $limit;
+				
+				// Set the extra query condition 
+				$extra_params = array(
+					'order_by_column'	=> 'place_id',
+					'order'				=> 'ASC',
+					'offset'			=> $offset,
+					'limit'				=> $limit,
+				);
+				
+				// Get the place list from database 
+				$read = new PlaceRead();
+				$place_list = $read->getFilteredPlaceWithExtra($query_params,$extra_params);
+				$status = true;
+			}
+			else
+			{
+				$errors[] = "Invalid Criteria Object.";
+			}
+		}
+		
+		// Set return vars 
+		$return_vars = array(
+			'place_list' => $place_list,
+			'errors'	 => $errors,
+			'status'	 => $status,
+		);
+		
+		// Set return vars 
+		$access_rtn['status'] = $status;
+		$access_rtn['return_vars'] = $return_vars;
+		
+        return $access_rtn;
+    }
+	
+	/**
+	 * Function that return the target place info 
+     * @param Request $request
+     * @return array
+     */
+    public function getPlaceInfoApi(Request $request){
+        // Get the parameter from GET 
+		// Note: We do not need to sanitize the input due to laravel automatically sanitize it 
+		$errors = array();
+		$place_info = array();
+		
+		// Validate the access 
+		$access_rtn = $this->access_validation($request);
+		// Check if the access is valid 
+		$status = $access_rtn['status'];
+		if($status)
+		{
+			// Extract information 
+			$place_id = $request->query('place_id');
+			
+			// Get the place list from database 
+			$read = new PlaceRead();
+			$place_info = $read->getSinglePlaceInfoById($place_id);
+			
+			if(empty($place_info))
+			{	
+				$errors[] = "Invalid Place ID.";
+				$status = false;
+			}
+		}
+		
+		// Set return vars 
+		$return_vars = array(
+			'place_info' => $place_info,
+			'errors'	 => $errors,
+			'status'	 => $status,
+		);
+		
+		// Set return vars 
+		$access_rtn['status'] = $status;
+		$access_rtn['return_vars'] = $return_vars;
+		
+        return $access_rtn;
     }
 
 }

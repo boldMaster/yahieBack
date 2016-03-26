@@ -32,8 +32,6 @@ class EventParticipantController extends Controller
         $result = "";
         $user_id = $request->get('user_id');
         $event_id = $request->get('event_id');
-        $user_id = 1;
-        $event_id = 1;
 
         $public_access_key = $request->query('api_key');
         // Get android callback
@@ -48,9 +46,7 @@ class EventParticipantController extends Controller
             $intValidateStatus = EventParticipant::validateParticipantEvent($user_id, $event_id, $result, $error);
             // Done all Validation for user and event
             if ($intValidateStatus == 1) {
-                //Temporary Event and User
-                $request['user_id'] = 1;
-                $request['event_id'] = 1;
+                $result ='{"event_id": '.$event_id.',"user_id": '.$user_id.'}';
                 // Input into Event Spool
                 EventParticipantCreate::participateEvent($request);
                 UserParticipantManage::logUserParticipant($user_id);

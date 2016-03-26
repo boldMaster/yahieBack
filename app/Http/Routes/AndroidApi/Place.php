@@ -8,3 +8,7 @@
 Route::get('android/v1/place/filter', [
     'as' => 'filterResult', 'uses' => 'Place\PlaceController@getPlaceApi'
 ]);
+
+Route::get('android/v1/place/getinfo', [
+    'as' => 'getPlaceInformation', 'uses' => 'Place\PlaceController@getPlaceInfoApi'
+]);

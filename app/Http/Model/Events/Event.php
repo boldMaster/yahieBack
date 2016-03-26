@@ -11,6 +11,8 @@ class Event extends Model
     public $timestamps = true;
     protected $fillable = array('place_id',
         'advertiser_id',
+        'event_title',
+        'event_desc',
         'status',
         'total_amount',
         'total_winner',
@@ -29,7 +31,15 @@ class Event extends Model
         return $hex;
     }
 
-
-
+    public static function getEvent(){
+        $objEvent = null;
+        $objEvent = self::getCurrentEvent();
+        return $objEvent;
+    }
+    public static function getNextEvent(){
+        $objEvent = null;
+        $objEvent = self::getNextComingEvent();
+        return $objEvent;
+    }
 
 }

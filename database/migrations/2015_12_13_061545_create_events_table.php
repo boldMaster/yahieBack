@@ -18,6 +18,8 @@ class CreateEventsTable extends Migration
             $table->integer('place_id',false)->index();
             $table->integer('advertiser_id',false)->index();
             $table->tinyInteger('status', false)->index();
+            $table->string('event_title',200);
+            $table->string('event_desc',500);
             $table->integer('total_amount', false);
             $table->integer('total_winner', false);
             $table->integer('amount_per_voucher', false);
